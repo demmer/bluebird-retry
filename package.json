@@ -1,0 +1,32 @@
+{
+  "name": "bluebird-retry",
+  "version": "0.1.0",
+  "description": "utility for retrying a bluebird promise until it succeeds",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jut-io/bluebird-retry.git"
+  },
+  "keywords": [
+    "bluebird",
+    "promise",
+    "retry"
+  ],
+  "author": "Michael Demmer <demmer@jut.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jut-io/bluebird-retry/issues"
+  },
+  "homepage": "https://github.com/jut-io/bluebird-retry",
+  "dependencies": {
+    "bluebird": "^2.3.10",
+    "underscore": "^1.7.0"
+  },
+  "devDependencies": {
+    "chai": "^1.9.2",
+    "grunt": "^0.4.5"
+  }
+}
