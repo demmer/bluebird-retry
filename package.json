@@ -27,6 +27,12 @@
   },
   "devDependencies": {
     "chai": "^1.9.2",
-    "grunt": "^0.4.5"
-  }
+    "grunt": "^0.4.5",
+    "grunt-dry": "^0.1.1"
+  },
+  "files":[
+    "browser/*.js",
+    "index.js",
+    "lib"
+  ]
 }
