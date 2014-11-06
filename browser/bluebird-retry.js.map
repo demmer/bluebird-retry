@@ -1,7 +1,7 @@
 {
   "version": 3,
   "sources": [
-    "../grunt-dry/node_modules/grunt-browserify/node_modules/browserify/node_modules/browser-pack/_prelude.js",
+    "node_modules/grunt-dry/node_modules/grunt-browserify/node_modules/browserify/node_modules/browser-pack/_prelude.js",
     "index.js",
     "lib/bluebird-retry.js"
   ],
