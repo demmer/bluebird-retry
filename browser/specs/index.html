@@ -9,15 +9,25 @@
     <div id="mocha"></div>
     <script src="../../node_modules/grunt-dry/node_modules/mocha/mocha.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" charset="utf-8">
+        window.PHANTOMJS = {};
         mocha.setup('bdd');
     </script>
 
     <script src="../../node_modules/grunt-dry/node_modules/grunt-mocha/phantomjs/bridge.js" type="text/javascript" charset="utf-8"></script>
-
-    <script src="./bluebird-retry.spec.js"></script>
+    <script src="../../node_modules/grunt-dry/node_modules/requirejs/require.js" type="text/javascript" charset="utf-8"></script>
 
     <script type="text/javascript" charset="utf-8">
-        mocha.run();
+        require.config({
+            paths: {
+    "bluebird-retry": "../bluebird-retry",
+    "bluebird": "../../node_modules/bluebird/js/browser/bluebird",
+    "chai": "../../node_modules/chai/chai"
+}
+        });
+
+        require(["bluebird-retry.spec.js"], function() {
+            mocha.run();
+        });
     </script>
 </body>
 
