@@ -28,7 +28,7 @@
   "devDependencies": {
     "chai": "^1.9.2",
     "grunt": "^0.4.5",
-    "grunt-dry": "^0.1.1"
+    "grunt-dry": "^0.2.0"
   },
   "files":[
     "browser/*.js",
