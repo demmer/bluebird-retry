@@ -55,7 +55,7 @@
             // If neither is specified, then the default is to make 5 attempts.
             function retry(func, options) {
                 options = options || {};
-                var interval = options.interval || 1000;
+                var interval = typeof options.interval === 'number' ? options.interval : 1000;
                 var max_tries, giveup_time;
                 if (typeof options.max_tries !== 'undefined') {
                     max_tries = options.max_tries;
@@ -96,6 +96,7 @@
                             var timeout = new Error('operation timed out after ' + (now - start) + ' ms, ' + tries + ' tries' + ' failure: ' + err.message);
                             timeout.failure = err;
                             timeout.code = 'ETIMEDOUT';
+                            timeout.stack = err.stack;
                             return Promise.reject(timeout);
                         } else {
                             var delay = interval - (now - tryStart);
