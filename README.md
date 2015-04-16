@@ -57,7 +57,8 @@ between retries can be specified via the `options` parameter:
 Note that `timeout` does not actually set a real timeout for the operation,
 but actually computes a maximum number of attempts based on the interval
 options. If both `timeout` and `max_tries` are specified, then whichever
-limit comes first applies.
+limit comes first applies. If `max_tries` is set to `-1` and no `timeout` 
+is specified, retry will be performed forever.
 
 For example:
 
