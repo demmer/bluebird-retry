@@ -1,6 +1,6 @@
 {
   "name": "bluebird-retry",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "utility for retrying a bluebird promise until it succeeds",
   "main": "index.js",
   "scripts": {
@@ -30,7 +30,7 @@
     "grunt": "^0.4.5",
     "grunt-dry": "^0.3.0"
   },
-  "files":[
+  "files": [
     "browser/*.js",
     "index.js",
     "lib"
