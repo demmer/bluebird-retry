@@ -168,23 +168,31 @@ describe('bluebird-retry', function() {
             it('can cancel the retry event loop', function() {
                 // test various ways in which cancel() may be invoked
                 // by the caller & verify it's output error message
-               // ie. input arg => output Error message
+                // ie. input arg => output Error message / type
+                function MyError(message) {
+                    this.name = 'MyError';
+                    Error.call(this);
+                    this.message = message;
+                    this.is_my_error = true;
+                }
+                MyError.prototype = Object.create(Error.prototype);
+
                 var test_args = [
                     [ undefined, 'cancelled' ],
-                    [ 'string error', 'string error' ],
-                    [ new Error('custom error'), 'custom error' ]
+                    [ 'stop retrying', 'stop retrying'],
+                    [ new MyError('test my error'), 'test my error']
                 ];
                 var retry_opts = {interval: 10, max_tries: 5};
 
                 return Promise.all(_.map(test_args, function(arg_type) {
                     var i = 0;
                     var err;
-                    var op = function(cancel) {
+                    var op = function() {
                         i++;
                         if (i === 3) {
-                            cancel(arg_type[0]);
+                            throw new retry.CancelError(arg_type[0]);
                         }
-                        throw new Error();
+                        throw new Error('keep trying');
                     };
                     return retry(op, retry_opts)
                     .catch(function(e) {
@@ -193,6 +201,10 @@ describe('bluebird-retry', function() {
                     .then(function() {
                         expect(i).to.equal(3);
                         expect(err.message).equal(arg_type[1]);
+                        if (arg_type[0] instanceof MyError) {
+                            expect(err instanceof MyError).is.true;
+                            expect(err.is_my_error).is.true;
+                        }
                     });
                 }));
             });
