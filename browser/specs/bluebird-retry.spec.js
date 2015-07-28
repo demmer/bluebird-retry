@@ -32,17 +32,40 @@
     _require.cache = [];
     _require.modules = [
         function (module, exports) {
-            var Promise = _require(1);    // Retry `func` until it succeeds.
+            var Promise = _require(1);    // Subclass of Error that can be thrown to indicate that retry should stop.
                                           //
-                                          // Waits `options.interval` milliseconds (default 1000) between attempts.
+                                          // If called with an instance of Error subclass, then the retry promise will be
+                                          // rejected with the given error.
                                           //
-                                          // Increases wait by a factor of `options.backoff` each interval, up to
-                                          // a limit of `options.max_interval`.
+                                          // Otherwise the cancel error object itself is propagated to the caller.
                                           //
-                                          // Keeps trying until `options.timeout` milliseconds have elapsed,
-                                          // or `options.max_tries` have been attempted, whichever comes first.
-                                          //
-                                          // If neither is specified, then the default is to make 5 attempts.
+            // Subclass of Error that can be thrown to indicate that retry should stop.
+            //
+            // If called with an instance of Error subclass, then the retry promise will be
+            // rejected with the given error.
+            //
+            // Otherwise the cancel error object itself is propagated to the caller.
+            //
+            function StopError(err) {
+                this.name = 'StopError';
+                if (err instanceof Error) {
+                    this.err = err;
+                } else {
+                    this.message = err || 'cancelled';
+                }
+            }
+            StopError.prototype = Object.create(Error.prototype);
+            retry.StopError = StopError;    // Retry `func` until it succeeds.
+                                            //
+                                            // Waits `options.interval` milliseconds (default 1000) between attempts.
+                                            //
+                                            // Increases wait by a factor of `options.backoff` each interval, up to
+                                            // a limit of `options.max_interval`.
+                                            //
+                                            // Keeps trying until `options.timeout` milliseconds have elapsed,
+                                            // or `options.max_tries` have been attempted, whichever comes first.
+                                            //
+                                            // If neither is specified, then the default is to make 5 attempts.
             // Retry `func` until it succeeds.
             //
             // Waits `options.interval` milliseconds (default 1000) between attempts.
@@ -68,25 +91,18 @@
                     max_tries = 5;
                 }
                 var tries = 0;
-                var start = new Date().getTime();    // populate the caller's argument with a cancel function
-                                                     // When invoked, we use its signal to break out of the retry loop
-                // populate the caller's argument with a cancel function
-                // When invoked, we use its signal to break out of the retry loop
-                var cancelled;
-                var cancel = function (err) {
-                    cancelled = true;
-                    if (!(err instanceof Error)) {
-                        err = new Error(err || 'cancelled');
-                    }
-                    throw err;
-                };
+                var start = new Date().getTime();
                 function try_once() {
                     var tryStart = new Date().getTime();
                     return Promise.try(function () {
-                        return func(cancel);
+                        return func();
                     }).catch(function (err) {
-                        if (cancelled) {
-                            return Promise.reject(err);
+                        if (err instanceof StopError) {
+                            if (err.err instanceof Error) {
+                                return Promise.reject(err.err);
+                            } else {
+                                return Promise.reject(err);
+                            }
                         }
                         ++tries;
                         if (tries > 1) {
@@ -1886,19 +1902,26 @@
                         it('can cancel the retry event loop', function () {
                             // test various ways in which cancel() may be invoked
                             // by the caller & verify it's output error message
-                            // ie. input arg => output Error message
+                            // ie. input arg => output Error message / type
+                            function MyError(message) {
+                                this.name = 'MyError';
+                                Error.call(this);
+                                this.message = message;
+                                this.is_my_error = true;
+                            }
+                            MyError.prototype = Object.create(Error.prototype);
                             var test_args = [
                                     [
                                         undefined,
                                         'cancelled'
                                     ],
                                     [
-                                        'string error',
-                                        'string error'
+                                        'stop retrying',
+                                        'stop retrying'
                                     ],
                                     [
-                                        new Error('custom error'),
-                                        'custom error'
+                                        new MyError('test my error'),
+                                        'test my error'
                                     ]
                                 ];
                             var retry_opts = {
@@ -1908,18 +1931,22 @@
                             return Promise.all(_.map(test_args, function (arg_type) {
                                 var i = 0;
                                 var err;
-                                var op = function (cancel) {
+                                var op = function () {
                                     i++;
                                     if (i === 3) {
-                                        cancel(arg_type[0]);
+                                        throw new retry.StopError(arg_type[0]);
                                     }
-                                    throw new Error();
+                                    throw new Error('keep trying');
                                 };
                                 return retry(op, retry_opts).catch(function (e) {
                                     err = e;
                                 }).then(function () {
                                     expect(i).to.equal(3);
                                     expect(err.message).equal(arg_type[1]);
+                                    if (arg_type[0] instanceof MyError) {
+                                        expect(err instanceof MyError).is.true;
+                                        expect(err.is_my_error).is.true;
+                                    }
                                 });
                             }));
                         });
