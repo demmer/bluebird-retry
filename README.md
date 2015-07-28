@@ -8,9 +8,9 @@ It supports regular intervals and exponential backoff with a configurable
 limit, as well as an overall timeout for the operation that limits the
 number of retries.
 
-Uses the bluebird library to supply the promise implementation.
+The bluebird library supplies the promise implementation.
 
-Sample usage:
+## Basic Usage
 
 ```js
 var Promise = require('bluebird');
@@ -44,6 +44,8 @@ i succeed the third time
 
 Note that the rejection messages from the first two failed calls
 were absorbed by `retry`.
+
+## Options
 
 The maximum number of retries and controls for the interval
 between retries can be specified via the `options` parameter:
@@ -93,3 +95,37 @@ Will display:
 2014-05-29T23:17:36.661Z
 Error: operation timed out
 ```
+
+## Cancellation
+
+The library also supports canceling the retry loop before the timeout occurs by throwing a new instance of `retry.CancelError`. For example:
+
+```js
+var retry = require('bluebird-retry');
+var i = 0;
+var err;
+var swing = function() {
+    i++;
+    console.log('strike ' + i);
+    if (i == 3) {
+        throw new retry.CancelError('yer out');
+    }
+    throw new Error('still up at bat');
+};
+
+retry(swing, {timeout: 10000})
+.catch(function(e) {
+    console.log(e.message)
+});
+```
+
+Will display:
+
+```
+strike 1
+strike 2
+strike 3
+yer out
+```
+
+The `CancelError` constructor accepts one argument. If it is invoked with an instance of `Error`, then the promise is rejected with that error argument. Otherwise the promise is rejected with the `CancelError` itself.
