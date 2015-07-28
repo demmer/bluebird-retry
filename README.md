@@ -96,9 +96,11 @@ Will display:
 Error: operation timed out
 ```
 
-## Cancellation
+## Stopping
 
-The library also supports canceling the retry loop before the timeout occurs by throwing a new instance of `retry.CancelError`. For example:
+The library also supports stopping the retry loop before the timeout occurs by throwing a new instance of `retry.StopError` from within the called function.
+
+For example:
 
 ```js
 var retry = require('bluebird-retry');
@@ -108,7 +110,7 @@ var swing = function() {
     i++;
     console.log('strike ' + i);
     if (i == 3) {
-        throw new retry.CancelError('yer out');
+        throw new retry.StopError('yer out');
     }
     throw new Error('still up at bat');
 };
@@ -128,4 +130,4 @@ strike 3
 yer out
 ```
 
-The `CancelError` constructor accepts one argument. If it is invoked with an instance of `Error`, then the promise is rejected with that error argument. Otherwise the promise is rejected with the `CancelError` itself.
+The `StopError` constructor accepts one argument. If it is invoked with an instance of `Error`, then the promise is rejected with that error argument. Otherwise the promise is rejected with the `StopError` itself.

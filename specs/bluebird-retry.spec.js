@@ -190,7 +190,7 @@ describe('bluebird-retry', function() {
                     var op = function() {
                         i++;
                         if (i === 3) {
-                            throw new retry.CancelError(arg_type[0]);
+                            throw new retry.StopError(arg_type[0]);
                         }
                         throw new Error('keep trying');
                     };

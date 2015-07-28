@@ -46,26 +46,26 @@
             //
             // Otherwise the cancel error object itself is propagated to the caller.
             //
-            function CancelError(err) {
-                this.name = 'CancelError';
+            function StopError(err) {
+                this.name = 'StopError';
                 if (err instanceof Error) {
                     this.err = err;
                 } else {
                     this.message = err || 'cancelled';
                 }
             }
-            CancelError.prototype = Object.create(Error.prototype);
-            retry.CancelError = CancelError;    // Retry `func` until it succeeds.
-                                                //
-                                                // Waits `options.interval` milliseconds (default 1000) between attempts.
-                                                //
-                                                // Increases wait by a factor of `options.backoff` each interval, up to
-                                                // a limit of `options.max_interval`.
-                                                //
-                                                // Keeps trying until `options.timeout` milliseconds have elapsed,
-                                                // or `options.max_tries` have been attempted, whichever comes first.
-                                                //
-                                                // If neither is specified, then the default is to make 5 attempts.
+            StopError.prototype = Object.create(Error.prototype);
+            retry.StopError = StopError;    // Retry `func` until it succeeds.
+                                            //
+                                            // Waits `options.interval` milliseconds (default 1000) between attempts.
+                                            //
+                                            // Increases wait by a factor of `options.backoff` each interval, up to
+                                            // a limit of `options.max_interval`.
+                                            //
+                                            // Keeps trying until `options.timeout` milliseconds have elapsed,
+                                            // or `options.max_tries` have been attempted, whichever comes first.
+                                            //
+                                            // If neither is specified, then the default is to make 5 attempts.
             // Retry `func` until it succeeds.
             //
             // Waits `options.interval` milliseconds (default 1000) between attempts.
@@ -97,7 +97,7 @@
                     return Promise.try(function () {
                         return func();
                     }).catch(function (err) {
-                        if (err instanceof CancelError) {
+                        if (err instanceof StopError) {
                             if (err.err instanceof Error) {
                                 return Promise.reject(err.err);
                             } else {
@@ -1934,7 +1934,7 @@
                                 var op = function () {
                                     i++;
                                     if (i === 3) {
-                                        throw new retry.CancelError(arg_type[0]);
+                                        throw new retry.StopError(arg_type[0]);
                                     }
                                     throw new Error('keep trying');
                                 };
