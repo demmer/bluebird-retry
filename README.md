@@ -14,6 +14,7 @@ The bluebird library supplies the promise implementation.
 
 ```js
 var Promise = require('bluebird');
+var retry = require('bluebird-retry');
 
 function promiseSuccess() {
     return Promise.resolve();
