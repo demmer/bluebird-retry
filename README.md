@@ -68,7 +68,7 @@ For example:
 ```js
 function logFail() {
     console.log(new Date().toISOString());
-    throw new Error('bail');}
+    throw new Error('bail');
 }
 
 retry(logFail, { max_tries: 4, interval: 500 });
