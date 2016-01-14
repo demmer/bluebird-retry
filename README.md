@@ -16,22 +16,19 @@ The bluebird library supplies the promise implementation.
 var Promise = require('bluebird');
 var retry = require('bluebird-retry');
 
-function promiseSuccess() {
-    return Promise.resolve();
-};
-
 var count = 0;
 function myfunc() {
     console.log('myfunc called ' + (++count) + ' times');
     if (count < 3) {
-        throw new Error('i fail the first two times');
+        return Promise.reject(new Error('fail the first two times'));
     } else {
-        return promiseSuccess('i succeed the third time');
+        return Promise.resolve('succeed the third time');
     }
 }
 
-retry(myfunc)
-    .done(function(result) { console.log(result); } );
+retry(myfunc).done(function(result) {
+    console.log(result);
+});
 ```
 
 This will display:
@@ -40,8 +37,12 @@ This will display:
 myfunc called 1 times
 myfunc called 2 times
 myfunc called 3 times
-i succeed the third time
+succeed the third time
 ```
+
+The function is executed by `Promise.try`, so it can return a simple value or a
+Promise that resolves successfully to indicate success, or it can throw an Error
+or a rejected promise to indicate failure.
 
 Note that the rejection messages from the first two failed calls
 were absorbed by `retry`.
