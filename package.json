@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/jut-io/bluebird-retry",
   "dependencies": {
-    "bluebird": ">=2.3.10"
+    "bluebird": ">=3.0.0"
   },
   "devDependencies": {
     "chai": "^1.9.2",
