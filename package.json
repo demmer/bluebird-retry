@@ -4,8 +4,9 @@
   "description": "utility for retrying a bluebird promise until it succeeds",
   "main": "index.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "gulp test"
   },
+  "browser": "./browser/bluebird-retry.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/jut-io/bluebird-retry.git"
@@ -25,10 +26,17 @@
     "bluebird": ">=2.3.10"
   },
   "devDependencies": {
+    "browserify": "^13.0.0",
     "chai": "^1.9.2",
-    "grunt": "^0.4.5",
-    "grunt-dry": "^0.3.0",
-    "underscore": ">=1.7.0"
+    "gulp": "^3.9.1",
+    "gulp-istanbul": "^0.10.3",
+    "gulp-mocha": "^2.2.0",
+    "gulp-mocha-phantomjs": "^0.11.0",
+    "mocha": "^2.4.5",
+    "requirejs": "^2.2.0",
+    "underscore": ">=1.7.0",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
   },
   "files": [
     "browser/*.js",
