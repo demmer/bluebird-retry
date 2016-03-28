@@ -1,0 +1,61 @@
+# Change Log
+This file documents all notable changes to bluebird-retry. The release numbering uses [semantic versioning](http://semver.org).
+
+## 0.6.0
+Released 2016-03-28
+
+- Changed bluebird to be a peerDependency instead of a regular dependency. This enables support for bluebird 3.
+- Replaced use of .try and .catch functions with the .attempt and .caught aliases to support older browsers.
+- Switched the build chain to use gulp and browserify instead of grunt.
+
+## 0.5.3
+Released 2016-01-14
+
+- Fixed the example in the README.
+
+## 0.5.2
+Released 2015-10-16
+
+- Fixed a typo in the README.
+
+## 0.5.1
+Released 2015-08-27
+
+- Fixed the README example.
+- Moved the dependency on underscore into devDependencies.
+
+## 0.5.0
+Released 2015-07-28
+
+- Reworked the cancellation API to use a StopError subclass instead of a callback function.
+
+## 0.4.0
+Released 2015-04-19
+
+- Updated the dependencies to be more permissive, supporting newer versions of bluebird.
+- Updated README.
+
+## 0.3.2
+Released 2015-03-18
+
+- Set the retry interval based on whether the option is a number, not whether it is truthy to support retry intervals of 0.
+
+## 0.3.1
+Released 2015-01-10
+
+- Propagate the error stack on the last retry failure so it is visible outside the try block.
+
+## 0.3.0
+Released 2015-01-02
+
+- Updated the browser build.
+
+## 0.2.0
+Released 2014-11-09
+
+- Rework the build to use grunt-dry.
+
+## 0.1.0
+Released 2014-11-06
+
+- Initial release
