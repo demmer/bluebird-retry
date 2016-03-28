@@ -22,7 +22,7 @@
     "url": "https://github.com/jut-io/bluebird-retry/issues"
   },
   "homepage": "https://github.com/jut-io/bluebird-retry",
-  "dependencies": {
+  "peerDependencies": {
     "bluebird": ">=2.3.10"
   },
   "devDependencies": {
