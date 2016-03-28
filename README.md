@@ -40,7 +40,7 @@ myfunc called 3 times
 succeed the third time
 ```
 
-The function is executed by `Promise.try`, so it can return a simple value or a
+The function is executed by `Promise.attempt`, so it can return a simple value or a
 Promise that resolves successfully to indicate success, or it can throw an Error
 or a rejected promise to indicate failure.
 
@@ -118,7 +118,7 @@ var swing = function() {
 };
 
 retry(swing, {timeout: 10000})
-.catch(function(e) {
+.caught(function(e) {
     console.log(e.message)
 });
 ```

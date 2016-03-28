@@ -98,7 +98,7 @@ describe('bluebird-retry', function() {
                     .then(function() {
                         throw new Error('unexpected success');
                     })
-                    .catch(function(err) {
+                    .caught(function(err) {
                         expect(err.message).match(/operation timed out/);
                         expect(err.failure.message).match(/not yet/);
                         expect(countSuccess.count).equal(10);
@@ -112,7 +112,7 @@ describe('bluebird-retry', function() {
                     .then(function() {
                         throw new Error('unexpected success');
                     })
-                    .catch(function(err) {
+                    .caught(function(err) {
                         expect(err.message).match(/operation timed out/);
                         expect(err.failure.message).match(/not yet/);
                         // Give a bit of leeway for bamboo
@@ -127,7 +127,7 @@ describe('bluebird-retry', function() {
                     .then(function() {
                         throw new Error('unexpected success');
                     })
-                    .catch(function(err) {
+                    .caught(function(err) {
                         expect(err.message).match(/operation timed out/);
                         expect(err.failure.message).match(/not yet/);
                         expect(countSuccess.count).equal(3); // 20 + 100 + 500
@@ -141,7 +141,7 @@ describe('bluebird-retry', function() {
                     .then(function() {
                         throw new Error('unexpected success');
                     })
-                    .catch(function(err) {
+                    .caught(function(err) {
                         expect(err.message).match(/operation timed out/);
                         expect(err.failure.message).match(/not yet/);
                         expect(countSuccess.count).equal(3); // 20 + 100 + 100
@@ -156,7 +156,7 @@ describe('bluebird-retry', function() {
                         .then(function() {
                             throw new Error('unexpected success');
                         })
-                        .catch(function(err) {
+                        .caught(function(err) {
                             expect(err.message).match(/operation timed out/);
                             expect(err.failure.message).match(/not yet/);
                             expect(count.count).equal(2);
@@ -195,7 +195,7 @@ describe('bluebird-retry', function() {
                         throw new Error('keep trying');
                     };
                     return retry(op, retry_opts)
-                    .catch(function(e) {
+                    .caught(function(e) {
                         err = e;
                     })
                     .then(function() {
