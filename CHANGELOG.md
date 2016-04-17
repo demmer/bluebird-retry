@@ -1,6 +1,11 @@
 # Change Log
 This file documents all notable changes to bluebird-retry. The release numbering uses [semantic versioning](http://semver.org).
 
+## 0.6.1
+Released 2016-04-17
+
+- Updated links in the package and README to reflect the new repository location.
+
 ## 0.6.0
 Released 2016-03-28
 
