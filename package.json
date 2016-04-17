@@ -9,7 +9,7 @@
   "browser": "./browser/bluebird-retry.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jut-io/bluebird-retry.git"
+    "url": "https://github.com/demmer/bluebird-retry.git"
   },
   "keywords": [
     "bluebird",
@@ -19,9 +19,9 @@
   "author": "Michael Demmer <demmer@jut.io>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jut-io/bluebird-retry/issues"
+    "url": "https://github.com/demmer/bluebird-retry/issues"
   },
-  "homepage": "https://github.com/jut-io/bluebird-retry",
+  "homepage": "https://github.com/demmer/bluebird-retry",
   "peerDependencies": {
     "bluebird": ">=2.3.10"
   },
