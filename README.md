@@ -1,4 +1,4 @@
-# bluebird-retry [![Build Status: Linux](https://travis-ci.org/jut-io/bluebird-retry.png?branch=master)](https://travis-ci.org/jut-io/bluebird-retry)
+# bluebird-retry [![Build Status: Linux](https://travis-ci.org/demmer/bluebird-retry.png?branch=master)](https://travis-ci.org/demmer/bluebird-retry)
 
 This very simple library provides a function for retrying an
 asynchronous operation until it succeeds. An "asynchronous operation"
