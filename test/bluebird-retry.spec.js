@@ -77,7 +77,8 @@ describe('bluebird-retry', function() {
             it('succeeds immediately', function(done) {
                 var countSuccess = countCalls(funcs.success);
                 return retry(countSuccess)
-                    .then(function() {
+                    .then(function(res) {
+                        expect(res).equal(true);
                         expect(countSuccess.count).equal(1);
                     })
                     .done(done, done);
