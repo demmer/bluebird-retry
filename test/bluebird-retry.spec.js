@@ -104,7 +104,9 @@ describe('bluebird-retry', function() {
                         throw new Error('unexpected success');
                     })
                     .caught(function(err) {
-                        expect(err.message).match(/operation timed out/);
+                        expect(err).match(/operation timed out.*not yet/);
+                        expect(err.message).match(/operation timed out.*not yet/);
+                        expect(err.failure).match(/not yet/);
                         expect(err.failure.message).match(/not yet/);
                         expect(countSuccess.count).equal(10);
                     })
@@ -120,7 +122,6 @@ describe('bluebird-retry', function() {
                         throw new Error('unexpected success');
                     })
                     .caught(function(err) {
-                        console.log(err.stack)
                         expect(err).match(/operation timed out.*something bad happened/);
                         expect(err.message).match(/something bad happened/);
                         expect(err.message).match(/operation timed out/);
