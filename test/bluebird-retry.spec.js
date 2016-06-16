@@ -12,11 +12,13 @@ var now = {
         throw new Error('not yet');
     },
 
-    successAfter: function(count) {
+    successAfter: function(count, ExpectedError) {
         var n = 0;
         return function() {
             if (++n === count) {
                 return now.success();
+            } else if (ExpectedError) {
+                throw new ExpectedError('catch this');
             } else {
                 return now.failure();
             }
@@ -33,11 +35,13 @@ var later = {
         return Promise.reject(new Error('not yet'));
     },
 
-    successAfter: function(count) {
+    successAfter: function(count, ExpectedError) {
         var n = 0;
         return function() {
             if (++n === count) {
                 return later.success();
+            } else if (ExpectedError) {
+                return Promise.reject(new ExpectedError('catch this'));
             } else {
                 return later.failure();
             }
@@ -208,6 +212,61 @@ describe('bluebird-retry', function() {
                         }
                     });
                 }));
+            });
+
+            var predicates = {
+                'error class': RangeError,
+                'predicate function': function(err) { return err instanceof RangeError; }
+            };
+
+            _.each(predicates, function(predicate, what) {
+                it('retries only when matching ' + what, function(done) {
+                    var countSuccess = countCalls(funcs.successAfter(5, RangeError));
+                    return retry(countSuccess, {
+                        interval: 10,
+                        max_tries: 10,
+                        predicate: predicate
+                    })
+                        .then(function() {
+                            expect(countSuccess.count).equal(5);
+                        })
+                        .done(done, done);
+                });
+
+                it('fails immediately with non matching ' + what, function(done) {
+                    var countSuccess = countCalls(funcs.failure);
+                    return retry(countSuccess, {
+                        interval: 10,
+                        max_tries: 10,
+                        predicate: predicate
+                    })
+                        .then(function() {
+                            throw new Error('unexpected success');
+                        })
+                        .caught(function(err) {
+                            expect(err.message).match(/not yet/);
+                            expect(countSuccess.count).equal(1);
+                        })
+                        .done(done, done);
+                });
+
+                it('fails after a few tries when matching ' + what, function(done) {
+                    var countSuccess = countCalls(funcs.successAfter(100, RangeError));
+                    return retry(countSuccess, {
+                        interval: 10,
+                        max_tries: 10,
+                        predicate: predicate
+                    })
+                        .then(function() {
+                            throw new Error('unexpected success');
+                        })
+                        .caught(function(err) {
+                            expect(err.message).match(/operation timed out/);
+                            expect(err.failure.message).match(/catch this/);
+                            expect(countSuccess.count).equal(10);
+                        })
+                        .done(done, done);
+                });
             });
         });
     });
