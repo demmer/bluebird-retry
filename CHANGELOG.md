@@ -1,6 +1,12 @@
 # Change Log
 This file documents all notable changes to bluebird-retry. The release numbering uses [semantic versioning](http://semver.org).
 
+## 0.7.0
+Released 2016-06-16
+
+- Added support for a `predicate` option that uses bluebird's [filtered catch](http://bluebirdjs.com/docs/api/catch.html#filtered-catch) so that only errors matching a particular type or predicate function cause the operation to retry.
+- Reworked the error handling to handle the case where the function rejects with a non-Error object and to no longer replace the timeout error stack with the original error's stack.
+
 ## 0.6.1
 Released 2016-04-17
 
