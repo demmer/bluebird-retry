@@ -111,6 +111,26 @@ describe('bluebird-retry', function() {
                     .done(done, done);
             });
 
+            it('handles rejection with a non-error', function(done) {
+                function badfail() {
+                    return Promise.reject('something bad happened')
+                }
+                return retry(badfail, {interval: 10, max_tries: 2})
+                    .then(function() {
+                        throw new Error('unexpected success');
+                    })
+                    .caught(function(err) {
+                        console.log(err.stack)
+                        expect(err).match(/operation timed out.*something bad happened/);
+                        expect(err.message).match(/something bad happened/);
+                        expect(err.message).match(/operation timed out/);
+                        expect(err.stack).match(/something bad happened/);
+                        expect(err.failure.failure).equals('something bad happened');
+                    })
+                    .done(done, done);
+            });
+
+
             it('calculates max_tries based on timeout', function(done) {
                 var countSuccess = countCalls(funcs.successAfter(500));
                 return retry(countSuccess, {interval: 50, timeout: 475})
