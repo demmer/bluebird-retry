@@ -113,7 +113,7 @@ describe('bluebird-retry', function() {
                     .done(done, done);
             });
 
-            it('handles rejection with a non-error', function(done) {
+            it('handles rejection with a string', function(done) {
                 function badfail() {
                     return Promise.reject('something bad happened')
                 }
@@ -127,6 +127,60 @@ describe('bluebird-retry', function() {
                         expect(err.message).match(/operation timed out/);
                         expect(err.stack).match(/something bad happened/);
                         expect(err.failure.failure).equals('something bad happened');
+                    })
+                    .done(done, done);
+            });
+
+            it('handles rejection with a non-error item', function(done) {
+                function badfail() {
+                    return Promise.reject({'thrown': 'object'})
+                }
+                return retry(badfail, {interval: 10, max_tries: 2})
+                    .then(function() {
+                        throw new Error('unexpected success');
+                    })
+                    .caught(function(err) {
+                        expect(err).match(/operation timed out.*{"thrown":"object"}/);
+                        expect(err.message).match(/{"thrown":"object"}/);
+                        expect(err.message).match(/operation timed out/);
+                        expect(err.stack).match(/{"thrown":"object"}/);
+                        expect(err.failure.failure).equals('{"thrown":"object"}');
+                    })
+                    .done(done, done);
+            });
+
+            it('handles rejection with a NULL item', function(done) {
+                function badfail() {
+                    return Promise.reject(null)
+                }
+                return retry(badfail, {interval: 10, max_tries: 2})
+                    .then(function() {
+                        throw new Error('unexpected success');
+                    })
+                    .caught(function(err) {
+                        expect(err).match(/operation timed out.*null/);
+                        expect(err.message).match(/null/);
+                        expect(err.message).match(/operation timed out/);
+                        expect(err.stack).match(/null/);
+                        expect(err.failure.failure).is.null;
+                    })
+                    .done(done, done);
+            });
+
+            it('handles rejection with an undefined item', function(done) {
+                function badfail() {
+                    return Promise.reject(undefined)
+                }
+                return retry(badfail, {interval: 10, max_tries: 2})
+                    .then(function() {
+                        throw new Error('unexpected success');
+                    })
+                    .caught(function(err) {
+                        expect(err).match(/operation timed out.*undefined/);
+                        expect(err.message).match(/undefined/);
+                        expect(err.message).match(/operation timed out/);
+                        expect(err.stack).match(/undefined/);
+                        expect(err.failure.failure).is.undefined;
                     })
                     .done(done, done);
             });
