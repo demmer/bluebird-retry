@@ -1,6 +1,11 @@
 # Change Log
 This file documents all notable changes to bluebird-retry. The release numbering uses [semantic versioning](http://semver.org).
 
+## 0.8.0
+Proposed / Unreleased
+
+- Make sure to stringify a non-error so we get information on the failure instead of the not very helpful [object Object] default toString of a javascript object.
+
 ## 0.7.0
 Released 2016-06-16
 
