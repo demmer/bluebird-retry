@@ -357,6 +357,32 @@ describe('bluebird-retry', function() {
                         })
                         .done(done, done);
                 });
+                
+                it('supports optional context', function(done) {
+                    var expected = {self: "this is my this"};
+                    var context;
+                    function func() {
+                        context = this;
+                    }
+                    return retry(func, {context: expected})
+                    .then(function() {
+                        expect(context).equals(expected);
+                    })
+                    .done(done, done);
+                });
+
+                it('supports optional args', function(done) {
+                    var expected = ["arg0", "arg1"];
+                    var args;
+                    function func() {
+                        args = Array.prototype.slice.call(arguments);
+                    }
+                    return retry(func, {args: expected})
+                    .then(function() {
+                        expect(args).deep.equal(expected);
+                    })
+                    .done(done, done);
+                });
             });
         });
     });
