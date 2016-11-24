@@ -58,6 +58,7 @@ between retries can be specified via the `options` parameter:
 * `timeout` total time to wait for the operation to succeed in milliseconds
 * `max_tries` maximum number of attempts to try the operation (default 5)
 * `predicate` to be used as bluebird's [Filtered Catch](http://bluebirdjs.com/docs/api/catch.html#filtered-catch). `func` will be retried only if the predicate expectation is met, it will otherwise fail immediately.
+* `throw_original` to throw the last thrown error instance rather then a timeout error.
 
 Note that `timeout` does not actually set a real timeout for the operation,
 but actually computes a maximum number of attempts based on the interval
