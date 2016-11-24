@@ -185,6 +185,22 @@ describe('bluebird-retry', function() {
                     .done(done, done);
             });
 
+            it('supports the throw_original option', function(done) {
+                var original_err;
+                function badfail() {
+                    original_err = new Error('original error');
+                    throw original_err;
+                }
+                return retry(badfail, {interval: 10, max_tries: 2, throw_original: true})
+                    .then(function() {
+                        throw new Error('unexpected success');
+                    })
+                    .caught(function(err) {
+                        expect(err).equals(original_err);
+                    })
+                    .done(done, done);
+            });
+
             it('calculates max_tries based on timeout', function(done) {
                 var countSuccess = countCalls(funcs.successAfter(500));
                 return retry(countSuccess, {interval: 50, timeout: 475})
