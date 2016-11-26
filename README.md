@@ -26,7 +26,8 @@ function myfunc() {
     }
 }
 
-retry(myfunc).done(function(result) {
+retry(myfunc)
+.then(function(result) {
     console.log(result);
 });
 ```
