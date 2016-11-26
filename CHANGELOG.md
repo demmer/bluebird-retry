@@ -1,6 +1,16 @@
 # Change Log
 This file documents all notable changes to bluebird-retry. The release numbering uses [semantic versioning](http://semver.org).
 
+## 0.10.0
+Released 2016-11-26
+
+- Added optional `context` and `args` options that are used when invoking the retry function.
+
+## 0.9.0
+Released 2016-11-23
+
+- @dustinblackman added a `throw_original` option so that timeout errors throw the original error instead of wrapping it in a new Error.
+
 ## 0.8.0
 Released 2016-06-27
 
