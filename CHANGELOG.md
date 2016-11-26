@@ -1,6 +1,11 @@
 # Change Log
 This file documents all notable changes to bluebird-retry. The release numbering uses [semantic versioning](http://semver.org).
 
+## 0.10.1
+Released 2016-11-26
+
+- Fixed the readme to not suggest using the discouraged `.done` chain function.
+
 ## 0.10.0
 Released 2016-11-26
 
