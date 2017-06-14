@@ -1,6 +1,11 @@
 # Change Log
 This file documents all notable changes to bluebird-retry. The release numbering uses [semantic versioning](http://semver.org).
 
+## 0.11.0
+Released 2017-06-13
+
+- @amir-arad removed special browserify entry from package.json
+
 ## 0.10.1
 Released 2016-11-26
 
