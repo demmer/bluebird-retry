@@ -6,7 +6,6 @@
   "scripts": {
     "test": "gulp test"
   },
-  "browser": "./browser/bluebird-retry.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/demmer/bluebird-retry.git"
