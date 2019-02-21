@@ -61,7 +61,7 @@ between retries can be specified via the `options` parameter:
 * `predicate` to be used as bluebird's [Filtered Catch](http://bluebirdjs.com/docs/api/catch.html#filtered-catch). `func` will be retried only if the predicate expectation is met, it will otherwise fail immediately.
 * `throw_original` to throw the last thrown error instance rather then a timeout error.
 * `context` if specified, is used as the `this` context when calling `func`
-* `args` if specified, is passed as arguments to `func`
+* `args` if specified, is passed as arguments to `func` (["arg0", "arg1"])
 
 Note that `timeout` does not actually set a real timeout for the operation,
 but actually computes a maximum number of attempts based on the interval
